@@ -1,0 +1,25 @@
+{
+    "name": "angular-utils-imco",
+    "version": "0.0.0",
+    "homepage": "https://github.com/hugomosh/angular-utils-imco",
+    "authors": [
+        "hugomosh <hugomosh@gmail.com>"
+    ],
+    "description": "\"Librería para angular con herramientas recurrentes en proyectos del IMCO para angular\"",
+    "main": "imco-utils.js",
+    "keywords": [
+        "\"IMCO",
+        "utils\""
+    ],
+    "license": "MIT",
+    "ignore": [
+        "**/.*",
+        "node_modules",
+        "bower_components",
+        "test",
+        "tests"
+    ],
+    "dependencies": {
+        "angular": ">= 1.0.2"
+    }
+}
