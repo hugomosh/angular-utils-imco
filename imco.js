@@ -303,7 +303,8 @@ angular.module('imco', [])
                 '                                                                                                    \n';
             console.log(logoASCII, 'color:' + color + ';');
             return {
-                logoASCII, color
+                texto: logoASCII,
+                color: color
             };
         };
 
