@@ -13,6 +13,16 @@ module.exports = function(config) {
         browsers: ['Chrome'],
         autoWatch: false,
         singleRun: true,
-        colors: true
+        colors: true,
+        customLaunchers: {
+            Chrome_travis_ci: {
+                base: 'Chrome',
+                flags: ['--no-sandbox']
+            }
+        },
     });
+
+    if (process.env.TRAVIS) {
+        config.browsers = ['Chrome_travis_ci'];
+    }
 };
