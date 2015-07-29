@@ -311,4 +311,100 @@ angular.module('imco', [])
         return {
             imprimeIMCO: imprimeIMCO,
         };
+    })
+    .service('socialShareImco', function Socialshare($window, $http) {
+        // AngularJS will instantiate a singleton by calling "new" on this function
+        var popup = function(url, target, w, h) {
+            $window.open(url, target, 'width=' + w.toString() + ',height=' + h.toString() + ',location=false,status=false,resizable=false,scrollbars=false,titlebar=false,toolbar=false, top=' + ((screen.height / 2) - (h / 2)) + ', left=' + ((screen.width / 2) - (w / 2)) + '');
+        };
+
+
+        var shareOnFB = function() {
+            html2canvas($('#estadisticas')).then(function(canvas) {
+                var imgUrl = canvas.toDataURL();
+                var imgData = imgUrl.replace('data:image/png;base64,', '');
+                // var hashStr = md5.createHash(imgData);
+                $http({
+                        method: 'PUT',
+                        url: ENV.apiEndpoint + '/lib/image',
+                        data: {
+                            encodedData: encodeURIComponent(imgData),
+                            hash: hashStr
+                        },
+                        dataType: 'json'
+                    })
+                    .success(function() {
+                        window.open('https://www.facebook.com/dialog/feed?app_id=660085307424801&display=popup' +
+                            '&caption=' + encodeURIComponent('CandidatoTransparente.mx') + '&link=' + encodeURIComponent('https://candidatotransparente.mx') + '&redirect_uri=' + encodeURIComponent('https://candidatotransparente.mx') + '&picture=' + encodeURIComponent(ENV.apiEndpoint + '/lib/image/' + hashStr));
+                    })
+                    .error(function(data) {
+                        console.log('Error');
+                        console.log(data);
+                    });
+            });
+        };
+
+        var share = function share(socialNet, messageConfig) {
+            // body...
+        };
+
+        var facebook = function(facebook) {
+            console.log('facebook', facebook);
+
+            var imcoFBID = '141448832714787';
+            var facebookURL = 'https://www.facebook.com/dialog/feed?app_id=' + imcoFBID + '&display=popup' +
+                '&caption=' + encodeURIComponent(facebook.caption);
+            /*
+             'https://www.facebook.com/dialog/feed?app_id=660085307424801&display=popup' +
+                                '&caption=' + encodeURIComponent('CandidatoTransparente.mx') +
+                                '&link=' + encodeURIComponent('https://candidatotransparente.mx') +
+                                '&redirect_uri=' + encodeURIComponent('https://candidatotransparente.mx') +
+                                '&picture=' + encodeURIComponent(ENV.apiEndpoint + '/lib/image/' + hashStr)*/
+            window.open(facebookURL);
+        };
+
+        var tweet = function(userTweet) {
+            // console.log(typeof userTweet);
+            console.log(userTweet);
+            var tweet = {
+                service: 'https://twitter.com/share',
+                url: null,
+                text: null,
+                hashtags: null,
+                via: null,
+                related: null
+            };
+
+            if (typeof userTweet === 'string') {
+                tweet.text = encodeURIComponent(userTweet).replace(/#/g, '%23');
+                tweet.url = encodeURIComponent($window.location.href);
+            } else if (typeof userTweet === 'object') {
+                tweet.text = encodeURIComponent(userTweet['text']);
+                if (typeof userTweet['url'] === 'string') {
+                    // console.log(tweet);
+                    tweet.url = encodeURIComponent(userTweet['url']);
+                }
+            }
+
+            var urlShareString = tweet.service + '?';
+
+            for (var attr in tweet) {
+                if (attr !== 'service' && tweet[attr] !== null) {
+                    if (urlShareString.substr(urlShareString.length - 1) === '?') {
+                        urlShareString = urlShareString + '' + attr + '=' + tweet[attr] + '';
+                    } else {
+                        urlShareString = urlShareString + '&' + attr + '=' + tweet[attr] + '';
+                    }
+                }
+            }
+            // console.log(urlShareString);
+            popup(urlShareString, 'blank', 550, 280);
+
+        };
+
+        return {
+            tweet: tweet,
+            facebook: facebook,
+        };
+
     });
