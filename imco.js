@@ -353,7 +353,9 @@ angular.module('imco', [])
 
             var imcoFBID = '141448832714787';
             var facebookURL = 'https://www.facebook.com/dialog/feed?app_id=' + imcoFBID + '&display=popup' +
-                '&caption=' + encodeURIComponent(facebook.caption);
+                '&caption=' + encodeURIComponent(facebook.caption) +
+                '&link=' + encodeURIComponent(facebook.link) +
+                '&redirect_uri=' + encodeURIComponent(facebook.redirect_uri);
             /*
              'https://www.facebook.com/dialog/feed?app_id=660085307424801&display=popup' +
                                 '&caption=' + encodeURIComponent('CandidatoTransparente.mx') +
