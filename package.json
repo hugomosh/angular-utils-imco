@@ -1,6 +1,6 @@
 {
     "name": "angular-utils-imco",
-    "version": "0.0.0",
+    "version": "0.0.2",
     "description": "",
     "directories": {
         "test": "test"
@@ -37,5 +37,6 @@
     "bugs": {
         "url": "https://github.com/hugomosh/angular-utils-imco/issues"
     },
-    "homepage": "https://github.com/hugomosh/angular-utils-imco#readme"
+    "homepage": "https://github.com/hugomosh/angular-utils-imco#readme",
+    "main": "imco.js"
 }
