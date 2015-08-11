@@ -367,7 +367,7 @@ angular.module('imco', [])
 
         var tweet = function(userTweet) {
             // console.log(typeof userTweet);
-            console.log(userTweet);
+            // console.log(userTweet);
             var tweet = {
                 service: 'https://twitter.com/share',
                 url: null,
