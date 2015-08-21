@@ -18,6 +18,20 @@ describe('imco', function() {
         var color = 'Me gusta la comprobación';
         expect(color.toURL()).toBe('me_gusta_la_comprobacion');
     });
+
+    it('Deberia decir que "[]" esta vacio ', function() {
+        var variable = [];
+        expect(utils.isEmpty(variable)).toBe(true);
+    });
+    it('Deberia decir que "variable no asignada" esta vacio ', function() {
+        var variable;
+        expect(utils.isEmpty(variable)).toBe(true);
+    });
+    it('Deberia decir que "null" esta vacio ', function() {
+        var variable = null;
+        expect(utils.isEmpty(variable)).toBe(true);
+    });
+
     it('Debería imprimir en consola ', function() {
 
         console.log = jasmine.createSpy("log");
