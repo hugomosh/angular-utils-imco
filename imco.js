@@ -7,6 +7,16 @@ angular.module('imco', [])
             });
         };
 
+
+
+        var turnOffConsole = function turnOffConsole() {
+            if (!window.console) window.console = {};
+            var methods = ["log", "debug", "info"];
+            for (var i = 0; i < methods.length; i++) {
+                console[methods[i]] = function() {};
+            }
+        }
+
         String.prototype.removeDiacritics = function() {
             var defaultDiacriticsRemovalMap = [{
                 'base': 'A',
@@ -349,6 +359,7 @@ angular.module('imco', [])
         return {
             imprimeIMCO: imprimeIMCO,
             isEmpty: isEmpty,
+            turnOffConsole: turnOffConsole,
         };
     })
     .service('socialShareImco', function Socialshare($window, $http) {
@@ -446,6 +457,7 @@ angular.module('imco', [])
         return {
             tweet: tweet,
             facebook: facebook,
+
         };
 
     });
