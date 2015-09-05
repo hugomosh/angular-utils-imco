@@ -359,7 +359,7 @@ angular.module('imco', [])
         return {
             imprimeIMCO: imprimeIMCO,
             isEmpty: isEmpty,
-            turnOffConsole: turnOffConsole,
+            turnOffConsole: turnOffConsole
         };
     })
     .service('socialShareImco', function Socialshare($window, $http) {
