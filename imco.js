@@ -402,10 +402,12 @@ angular.module('imco', [])
             console.log('facebook', facebook);
 
             var imcoFBID = '141448832714787';
+
             var facebookURL = 'https://www.facebook.com/dialog/feed?app_id=' + imcoFBID + '&display=popup' +
                 '&caption=' + encodeURIComponent(facebook.caption) +
                 '&link=' + encodeURIComponent(facebook.link) +
-                '&redirect_uri=' + encodeURIComponent(facebook.redirect_uri);
+                '&redirect_uri=' + encodeURIComponent(facebook.redirect_uri) +
+                (description) ? ('&description=' + encodeURIComponent(facebook.description)) : '';
             /*
              'https://www.facebook.com/dialog/feed?app_id=660085307424801&display=popup' +
                                 '&caption=' + encodeURIComponent('CandidatoTransparente.mx') +
