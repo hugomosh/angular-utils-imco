@@ -407,7 +407,7 @@ angular.module('imco', [])
                 '&caption=' + encodeURIComponent(facebook.caption) +
                 '&link=' + encodeURIComponent(facebook.link) +
                 '&redirect_uri=' + encodeURIComponent(facebook.redirect_uri) +
-                (description) ? ('&description=' + encodeURIComponent(facebook.description)) : '';
+                (facebook.description) ? ('&description=' + encodeURIComponent(facebook.description)) : '';
             /*
              'https://www.facebook.com/dialog/feed?app_id=660085307424801&display=popup' +
                                 '&caption=' + encodeURIComponent('CandidatoTransparente.mx') +
