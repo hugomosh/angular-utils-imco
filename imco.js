@@ -364,6 +364,8 @@ angular.module('imco', [])
     })
     .service('socialShareImco', function Socialshare($window, $http) {
         // AngularJS will instantiate a singleton by calling "new" on this function
+        var pageTitle = 'IMCO';
+
         var popup = function(url, target, w, h) {
             $window.open(url, target, 'width=' + w.toString() + ',height=' + h.toString() + ',location=false,status=false,resizable=false,scrollbars=false,titlebar=false,toolbar=false, top=' + ((screen.height / 2) - (h / 2)) + ', left=' + ((screen.width / 2) - (w / 2)) + '');
         };
@@ -399,12 +401,13 @@ angular.module('imco', [])
         };
 
         var facebook = function(facebook) {
-            console.log('facebook', facebook);
+            //console.log('facebook', facebook);
 
             var imcoFBID = '141448832714787';
 
             var facebookURL = 'https://www.facebook.com/dialog/feed?app_id=' + imcoFBID + '&display=popup' +
                 '&caption=' + encodeURIComponent(facebook.caption) +
+                '&name=' + encodeURIComponent(facebook.name) +
                 '&link=' + encodeURIComponent(facebook.link) +
                 '&redirect_uri=' + encodeURIComponent(facebook.redirect_uri);
             if (facebook.description) {
@@ -416,7 +419,7 @@ angular.module('imco', [])
                                 '&link=' + encodeURIComponent('https://candidatotransparente.mx') +
                                 '&redirect_uri=' + encodeURIComponent('https://candidatotransparente.mx') +
                                 '&picture=' + encodeURIComponent(ENV.apiEndpoint + '/lib/image/' + hashStr)*/
-            console.debug(facebookURL);
+            //console.debug(facebookURL);
             window.open(facebookURL);
         };
 
