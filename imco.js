@@ -7,8 +7,6 @@ angular.module('imco', [])
             });
         };
 
-
-
         var turnOffConsole = function turnOffConsole() {
             if (!window.console) window.console = {};
             var methods = ["log", "debug", "info"];
@@ -317,6 +315,7 @@ angular.module('imco', [])
                 color: color
             };
         };
+
         var isEmpty = function empty(val) {
 
             // test results
@@ -356,10 +355,42 @@ angular.module('imco', [])
             return false;
         }
 
+        var buscaEnArregloObjetos = function buscaEnArregloObjetos(arreglo, llave, perdido) {
+            try {
+
+
+                var result = $.grep(arreglo, function(e) {
+                    return e[llave] === perdido;
+                });
+                return result;
+            } catch (E) {
+                //console.log('Error en utils');
+                //  console.log(E);
+            }
+        };
+
+
+        var acronym = function acronym(txt) {
+            var result = txt.replace(/([A-Za-zÁÉÍÓÚáéíóú])([A-Za-z0-9ÁÉÍÓÚáéíóú]+)(\-|\s|$)/g, '$1');
+            result = result.replace(/Á/, 'A');
+            result = result.replace(/É/, 'E');
+            result = result.replace(/Í/, 'I');
+            result = result.replace(/Ó/, 'O');
+            result = result.replace(/Ú/, 'U');
+            result = result.replace(/á/, 'a');
+            result = result.replace(/é/, 'e');
+            result = result.replace(/í/, 'i');
+            result = result.replace(/ó/, 'o');
+            result = result.replace(/ú/, 'u');
+            return result;
+        };
+
         return {
             imprimeIMCO: imprimeIMCO,
             isEmpty: isEmpty,
-            turnOffConsole: turnOffConsole
+            turnOffConsole: turnOffConsole,
+            buscaEnArregloObjetos: buscaEnArregloObjetos,
+            acronym: acronym,
         };
     })
     .service('socialShareImco', function Socialshare($window, $http) {
