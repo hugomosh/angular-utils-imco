@@ -391,6 +391,7 @@ angular.module('imco', [])
             turnOffConsole: turnOffConsole,
             buscaEnArregloObjetos: buscaEnArregloObjetos,
             acronym: acronym,
+            getAcronym: acronym,
         };
     })
     .service('socialShareImco', function Socialshare($window, $http) {
@@ -499,4 +500,146 @@ angular.module('imco', [])
 
         };
 
+    })
+    .factory('apiConnection', function($q, $http) {
+
+        /* Generic function to make one time requests to API, it needs an API Dictionary*  */
+        var API = function(baseURL) {
+            this.baseURL = baseURL;
+            this.APISerivceDictionary = {};
+        };
+
+        API.prototype.getService = function(serviceName, params) {
+            // console.debug('Getting API service: ', serviceName);
+            if (typeof params !== 'undefined') {}
+            var deferred = $q.defer();
+            var service = this.APISerivceDictionary[serviceName];
+            if (service) {
+                if (service.cachable && service.dataExists(params)) {
+                    deferred.resolve(service.getData(params));
+                } else {
+                    if (service.loading) {
+                        //Tha data is already being request
+                        if (!service.waiting) {
+                            //There is no waiting list
+                            this.APISerivceDictionary[serviceName].waiting = [];
+                        }
+                        this.APISerivceDictionary[serviceName].waiting.push(deferred);
+                    } else {
+                        // console.debug('http', serviceName);
+                        service.loading = true;
+                        $http(service.createRequest(params))
+                            .success(function(result) {
+                                service.loading = false;
+                                if (service.cachable) {
+                                    service.setDataFromAPI(result, params);
+                                }
+                                if (service.waiting) {
+                                    service.waiting.forEach(function(deferred) {
+                                        deferred.resolve(result);
+                                    });
+                                }
+                                deferred.resolve(result);
+                            }).error(function(errorData) {
+                                service.loading = false;
+                                if (service.waiting) {
+                                    service.waiting.forEach(function(deferred) {
+                                        deferred.reject(errorData);
+                                    });
+                                }
+                                deferred.reject(errorData);
+                            });
+                    }
+                }
+            } else {
+                deferred.reject('service ' + serviceName + ' not found in apiServerDictionary');
+            }
+            return deferred.promise;
+        };
+
+        //Define the API specific sercie constructor 
+        var APISerivce = function(serviceName) {
+            this.serviceName = serviceName;
+            this.cachable = false;
+            this.loading = false;
+            this.waiting = [];
+        };
+
+        APISerivce.prototype.setDataFromAPI = function(data, params) {
+            if (typeof params !== 'undefined' && Object.keys(params).length === 1) {
+                if (!this.data) {
+                    this.data = {};
+                }
+                this.data[params[Object.keys(params)[0]]] = data;
+            } else {
+                this.data = data;
+            }
+        };
+
+        APISerivce.prototype.dataExists = function(data, params) {
+            if (typeof params !== 'undefined' && Object.keys(params).length === 1) {
+                return (typeof this.data[params[Object.keys(params)[0]]] !== 'undefined');
+            } else {
+                return this.hasOwnProperty('data');
+            }
+
+        };
+
+        APISerivce.prototype.getData = function(params) {
+
+            if (typeof params !== 'undefined' && Object.keys(params).length === 1 && typeof this.data[params[Object.keys(params)[0]]] !== 'undefined') {
+                return this.data[params[Object.keys(params)[0]]];
+            } else {
+                return this.data;
+            }
+
+        };
+
+        APISerivce.prototype.createRequest = function(params) {
+            var url_params = this.url;
+            if (typeof params !== 'undefined') {
+
+                url_params = url_params.replace(/(\/)?:(\w+)([\?\*])?/g, function(_, slash, name, qu) {
+
+                    if (params[name]) {
+                        return '' + (slash ? slash : '') + params[name] + (qu ? qu : '');
+                    }
+
+                });
+            }
+            var request = {
+                method: 'GET',
+                url: url_params,
+            };
+
+            // console.debug('url', request.url);
+            return request;
+
+        };
+
+        /*Example FINANZAS: 
+
+
+          var iipeAPI = new API('http://api.imco.org.mx/webservice/iipe/');
+
+        iipeAPI.APISerivceDictionary.avaible_publication_years = Object.create(APISerivce.prototype, { 
+            serviceName: {
+                value: 'avaible_publication_years'
+            },
+            cachable: {
+                value: true
+            },
+            url: {
+                value: 'http://api.imco.org.mx/webservice/iipe/'
+            },
+        });
+
+
+*/
+
+        // Public API here
+        return {
+            API: API,
+            APISerivce: APISerivce
+        };
     });
